@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t nvlnrao/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run nvlnrao/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t nvlnrao/multi-client -f ./client
+  - docker build -t nvlnrao/multi-nginx ./nginx
+  - docker build -t nvlnrao/multi-server ./server
+  - docker build -t nvlnrao/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to DockerHub
+  - docker push nvlnrao/multi-client
+  - docker push nvlnrao/multi-nginx
+  - docker push nvlnrao/multi-server
+  - docker push nvlnrao/multi-worker
