@@ -19,7 +19,7 @@
         "name": "worker",
         "image": "nvlnrao/multi-worker",
         "hostname": "worker",
-        "essential": false
+        "essential": false,
         "memory": 128
       },
       {
@@ -33,7 +33,7 @@
              "containerPort": 80
           }
          ],
-         "links": ["client", "server"]
+         "links": ["client", "server"],
          "memory": 128
       }
     ]
